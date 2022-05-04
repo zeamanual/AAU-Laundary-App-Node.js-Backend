@@ -1,4 +1,6 @@
 let UserModel = require("../models/user")
+let bcrypt = require("bcrypt")
+let {generateAccessToken,generateRefreshToken} = require('../helpers/generateToken')
 
 let getAll = (req,res)=>{
     
@@ -26,10 +28,20 @@ let login = async (req,res)=>{
     try {
         let user = await UserModel.findOne({userId:req.body.userId})
         if(user){
+            let valid= await bcrypt.compare(req.body.password,user.password)
+            if(valid){
+                let accessToken = generateAccessToken({userId:user.userId})
+                let refreshToken = generateRefreshToken({userId:user.userId})
+                return res.status(200).json({userId:user.userId,accessToken,refreshToken})
 
-        }
+            }else{
+                return res.status(401).json({errorMsg:"Invalid Password"})
+            }
+        }else{
+            return res.status(401).json({errorMsg:"UserID Can NOt Be Found"})
+   }
     } catch (error) {
-        
+        return res.status(500).json({errorMsg:error.message})    
     }
     
 }
