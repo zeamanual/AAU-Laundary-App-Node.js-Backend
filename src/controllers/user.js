@@ -7,11 +7,40 @@ let CustomError = require("../helpers/customError")
 let getAll = (req,res)=>{
     
 }
-let getOne = (req,res)=>{
-    
+let getOne = async(req,res,next)=>{
+    try {
+        let user = await UserModel.findOne({userId:req.params.id})
+        if(user){
+            res.status(200).json({userId:user.userId,username:user.username})
+        }else{
+            throw new CustomError("User Not Found",404)
+        }
+    } catch (error) {
+        next(error)
+    }
 }
-let update = (req,res)=>{
-    
+let update = async(req,res,next)=>{
+    try {
+        if(UserModel.exists({userId:req.params.id})){
+             if(req.body?.password){
+                let user = await UserModel.findOne({userId:req.params.id})
+                user.password=req.body.password
+                user.userId=req.body?.userId?req.body.userId:user.userId
+                user.username = req.body?.username?req.body.username:user.username
+                user.save()
+                
+            }else{
+                let user = await UserModel.findOneAndUpdate({userId:req.params.id},req.body,{runValidators:true})
+            }
+            res.status(200).json({msg:"Update Succfull"})
+        }else{
+            throw new CustomError("User Not Found",404)
+        }
+       
+        // res.
+     } catch (error) {
+        next(error)
+    }
 }
 let signup = async (req,res)=>{
     try {

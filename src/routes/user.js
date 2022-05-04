@@ -7,5 +7,5 @@ router.get('/token',updateToken)
 router.delete('/logout',logout)
 router.post('/signup',signup)
 router.route('/').get(getAll)
-router.route("/id").get(getOne).delete(deleteOne).put(update)
+router.route("/:id").get(getOne).delete(deleteOne).put(update)
 module.exports=router
