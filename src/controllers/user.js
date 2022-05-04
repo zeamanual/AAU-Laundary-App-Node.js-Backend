@@ -11,11 +11,14 @@ let update = (req,res)=>{
 }
 let signup = async (req,res)=>{
     try {
+        let existingUser = await UserModel.find({ userId:req.body.userId})
+        if(existingUser.length>0){
+            return res.status(400).json({errorMsg:"UserID alrady taken"})
+        }
         let response = await UserModel.create(req.body)
         res.status(201).json(response)
     } catch (error) {
         res.status(400).json({errorMsg:error.message})
-        
     } 
 }
 let login = (req,res)=>{
