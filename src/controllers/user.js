@@ -1,6 +1,8 @@
 let UserModel = require("../models/user")
 let bcrypt = require("bcrypt")
+let jwtVerify=require('../helpers/jwtVerify')
 let {generateAccessToken,generateRefreshToken} = require('../helpers/generateToken')
+let CustomError = require("../helpers/customError")
 
 let getAll = (req,res)=>{
     
@@ -32,6 +34,8 @@ let login = async (req,res)=>{
             if(valid){
                 let accessToken = generateAccessToken({userId:user.userId})
                 let refreshToken = generateRefreshToken({userId:user.userId})
+                await UserModel.findOneAndUpdate({userId:user.userId},{activeRefreshTokens:[...user.activeRefreshTokens,refreshToken]},{runValidators:true})
+
                 return res.status(200).json({userId:user.userId,accessToken,refreshToken})
 
             }else{
@@ -45,7 +49,28 @@ let login = async (req,res)=>{
     }
     
 }
-let logout = (req,res)=>{
+let logout = async (req,res,next)=>{
+    try {
+        let token = req.headers.authorization.split(' ')[1]
+        if(token){
+            verified = jwtVerify(token,process.env.REFRESH_TOKEN_KEY)
+            if(verified){
+                let user = await UserModel.findOne({userId:verified.userId})
+                let activeRefreshTokens = user.activeRefreshTokens.filter((existingToken)=>{
+                    return existingToken!=token
+                })
+                await UserModel.findOneAndUpdate({userId:verified.userId},{activeRefreshTokens},{runValidators:true})
+                return res.status(200).json({msg:"Log-out Successful"})
+            }else{
+                throw new CustomError("Invalid Token",401)
+            }
+        }else{
+            throw new CustomError("No Token Present",400)
+        } 
+     } catch (error) {
+         next(error)
+    }
+
     
 }
 let deleteOne = (req,res)=>{

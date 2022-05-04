@@ -1,6 +1,7 @@
-const CustomError = require("../helpers/customError")
+let CustomError = require("../helpers/customError")
 
 let errorHandler = (error,req,res,next)=>{
+    
     if (error instanceof(CustomError)){
         res.status(error.statusCode).json({errorMsg:error.message})
     }else{

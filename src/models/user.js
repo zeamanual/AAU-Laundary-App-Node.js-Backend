@@ -23,6 +23,9 @@ let userSchema = mongoose.Schema({
         type:String,
         enum:['USER','ADMIN'],
         default:'USER'
+    },
+    activeRefreshTokens:{
+        type:[String]
     }
 },{
     timestamps:true
