@@ -6,6 +6,7 @@ let clothSchema = mongoose.Schema({
         required:[true,'Name cant not be empty']
     },
     price :{
+        
         type:Number,
         required:[true,,'Price can not be empty']
 

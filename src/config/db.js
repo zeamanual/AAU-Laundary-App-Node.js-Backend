@@ -10,7 +10,3 @@ let connect = async(app)=>{
     
 }
 module.exports=connect
-
-// mongoose.connect('mongodb://localhost:27017/lundary').then(()=>{
-//     console.log("Database Connection Sucessful")
-// }).catch(error=>console.log(error))

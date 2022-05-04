@@ -1,3 +1,5 @@
+let UserModel = require("../models/user")
+
 let getAll = (req,res)=>{
     
 }
@@ -7,8 +9,14 @@ let getOne = (req,res)=>{
 let update = (req,res)=>{
     
 }
-let signup = (req,res)=>{
-    
+let signup = async (req,res)=>{
+    try {
+        let response = await UserModel.create(req.body)
+        res.status(201).json(response)
+    } catch (error) {
+        res.status(400).json({errorMsg:error.message})
+        
+    } 
 }
 let login = (req,res)=>{
     
