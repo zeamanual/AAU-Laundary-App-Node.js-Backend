@@ -73,6 +73,22 @@ let logout = async (req,res,next)=>{
 
     
 }
+let updateToken = async(req,res,next)=>{
+    try {
+        let refreshToken = req.body.refreshToken
+        verified= jwtVerify(refreshToken,process.env.REFRESH_TOKEN_KEY)
+        let user =await UserModel.findOne({userId:verified?.userId})
+        if(verified && user.activeRefreshTokens.includes(refreshToken)){
+            let accessToken = generateAccessToken({userId:user.userId})
+            res.status(200).json({accessToken})
+        }else{
+            throw new CustomError("Invalid Refresh Token",400)
+        }
+    } catch (error) {
+        next(error)
+    }
+    
+}
 let deleteOne = (req,res)=>{
     
 }
@@ -83,5 +99,6 @@ module.exports={
     signup,
     login,
     logout,
+    updateToken,
     deleteOne
 }
