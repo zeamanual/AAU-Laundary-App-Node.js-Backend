@@ -5,6 +5,5 @@ let jwtVerify = (token,key)=>{
     } catch (error) {
         return 
     }
-    
 }
 module.exports=jwtVerify
