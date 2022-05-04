@@ -15,13 +15,22 @@ let signup = async (req,res)=>{
         if(existingUser.length>0){
             return res.status(400).json({errorMsg:"UserID alrady taken"})
         }
-        let response = await UserModel.create(req.body)
+        let user = UserModel(req.body)
+        let response = await user.save()
         res.status(201).json(response)
     } catch (error) {
         res.status(400).json({errorMsg:error.message})
     } 
 }
-let login = (req,res)=>{
+let login = async (req,res)=>{
+    try {
+        let user = await UserModel.findOne({userId:req.body.userId})
+        if(user){
+
+        }
+    } catch (error) {
+        
+    }
     
 }
 let logout = (req,res)=>{

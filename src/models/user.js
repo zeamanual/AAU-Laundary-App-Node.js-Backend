@@ -1,4 +1,5 @@
 let mongoose = require('mongoose')
+let bcrypt = require('bcrypt')
 let userSchema = mongoose.Schema({
     userId:{
         type:String,
@@ -20,6 +21,13 @@ let userSchema = mongoose.Schema({
     }
 },{
     timestamps:true
+})
+
+userSchema.pre("save",async function(next){
+    console.log(this.userId)
+    this.password = await bcrypt.hash(this.password,10)
+    console.log(this.password)
+    next()
 })
 
 module.exports= mongoose.model('User',userSchema)
