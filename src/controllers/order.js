@@ -16,9 +16,9 @@ let create = async (req,res,next)=>{
         if(req.body?.clothes){
             let clothes = req.body.clothes
             for(let i =0;i<clothes.length;i++){
-                let cloth = await ClothModel.findOne({name:clothes[i]})
+                let cloth = await ClothModel.findOne({name:clothes[i].name})
                 console.log(cloth)
-                totalPrice+=cloth.price
+                totalPrice+=(cloth.price*clothes[i].quantity)
             }
             console.log(totalPrice)
             console.log(req.userId)

@@ -1,12 +1,22 @@
 let mongoose=require('mongoose')
+
+clothDetailSchema={
+    name:{
+        type:String,
+    },
+    quantity:{
+        type:Number
+    }
+}
+
 orderSchema = mongoose.Schema({
     userId:{
         type:String,
         ref:"User"
     },
     clothes:{
-        type:[String],
-        ref:"Cloth"
+        type:[clothDetailSchema],
+        required:true
     },
     price:{
         type:Number,
