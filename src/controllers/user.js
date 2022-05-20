@@ -48,7 +48,7 @@ let signup = async (req,res)=>{
         if(existingUser.length>0){
             return res.status(400).json({errorMsg:"UserID alrady taken"})
         }
-        let user = UserModel(req.body)
+        let user = UserModel({username:req.body.username,userId:req.body.userId,password:req.body.password,role:'USER'})
         let response = await user.save()
         res.status(201).json(response)
     } catch (error) {

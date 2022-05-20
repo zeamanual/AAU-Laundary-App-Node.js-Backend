@@ -1,12 +1,16 @@
 let mongoose=require('mongoose')
 orderSchema = mongoose.Schema({
     userId:{
-        type:mongoose.SchemaTypes.ObjectId,
+        type:String,
         ref:"User"
     },
     clothes:{
-        type:[mongoose.SchemaTypes.ObjectId],
+        type:[String],
         ref:"Cloth"
+    },
+    price:{
+        type:Number,
+        required:[true,'price can not be empty']
     },
     status:{
         type:String,

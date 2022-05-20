@@ -12,7 +12,7 @@ let app = express()
 conncet(app)
 app.use(express.json())
 app.use('/user',userRoute)
-app.use('/order',orderRoute)
+app.use('/order',authenticateUser,orderRoute)
 app.use('/cloth',clothRoute)
 app.get('/test',authenticateUser,isAdmin,(req,res,next)=>{
     res.send("hellow test")

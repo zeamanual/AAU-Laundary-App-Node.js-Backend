@@ -17,13 +17,19 @@ let getAll = async (req,res,next)=>{
 let getOne =async (req,res,next)=>{
     let id = req.params?.id
     try {
-        let cloth = await ClothModel.findOne({name:id})
-        if(cloth){
-            res.status(200).json({cloth})
+        if(id){
+
+        
+            let cloth = await ClothModel.findOne({name:id})
+            if(cloth){
+                res.status(200).json({cloth})
+            }else{
+                throw new CustomError(`No Cloth With name ${id}`,404)
+            }
         }else{
-            throw new CustomError(`No Cloth With name ${id}`,404)
+            throw new CustomError("Invalid id",400)
         }
-      
+        
     } catch (error) {
         next(error)
     }
@@ -40,7 +46,7 @@ let update = async(req,res,next)=>{
                 throw new CustomError(`No cloth with name ${req.params.id} found`,404)
             }
         }else{
-            throw new CustomError("Invalid input",400)
+            throw new CustomError("Invalid id",400)
         }
     } catch (error) {
         next(error)

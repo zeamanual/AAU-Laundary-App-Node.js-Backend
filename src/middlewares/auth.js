@@ -10,6 +10,7 @@ let authenticateUser= async(req,res,next)=>{
             if(verified){
                 let user = await UserModel.findOne({userId:verified.userId})
                 req.userRole = user?.role
+                req.userId=user.userId
                 next()
             }else{
             throw new CustomError("Invalid Access Token",401)
