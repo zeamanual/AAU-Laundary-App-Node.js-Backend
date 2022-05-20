@@ -29,8 +29,22 @@ let getOne =async (req,res,next)=>{
     }
     
 }
-let update = (req,res)=>{
-    
+let update = async(req,res,next)=>{
+    try {
+        if(req.params.id){
+            let existing = await ClothModel.findOne({name:req.params.id})
+            if(existing){
+               await ClothModel.findOneAndUpdate({name:req.params.id},req.body,{runValidators:true})
+               res.status(200).json({msg:"Operation Sucessful"})
+            }else{
+                throw new CustomError(`No cloth with name ${req.params.id} found`,404)
+            }
+        }else{
+            throw new CustomError("Invalid input",400)
+        }
+    } catch (error) {
+        next(error)
+    }
 }
 let create = async (req,res,next)=>{
     try {
@@ -55,7 +69,7 @@ let create = async (req,res,next)=>{
 }
 let deleteOne = async(req,res,next)=>{
     try {
-        let existing = await ClothModel.findOne({name:req.params.id})
+        let existing = await ClothModel.findOne({name:req.params?.id})
         if(existing){
             await ClothModel.findByIdAndDelete(existing._id)
            return res.status(200).json({msg:"Operation Successful"})
