@@ -10,7 +10,7 @@ let getAll = (req,res)=>{
 }
 let getOne = async(req,res,next)=>{
     try {
-        let user = await UserModel.findOne({userId:req.params.id})
+        let user = await UserModel.findOne({userId:req.params?.id})
         if(user){
             res.status(200).json({userId:user.userId,username:user.username})
         }else{
@@ -22,9 +22,9 @@ let getOne = async(req,res,next)=>{
 }
 let update = async(req,res,next)=>{
     try {
-        if(UserModel.exists({userId:req.params.id})){
+        if(UserModel.exists({userId:req.params?.id})){
              if(req.body?.password){
-                let user = await UserModel.findOne({userId:req.params.id})
+                let user = await UserModel.findOne({userId:req.params?.id})
                 user.password=req.body.password
                 user.userId=req.body?.userId?req.body.userId:user.userId
                 user.username = req.body?.username?req.body.username:user.username
@@ -38,18 +38,17 @@ let update = async(req,res,next)=>{
             throw new CustomError("User Not Found",404)
         }
        
-        // res.
      } catch (error) {
         next(error)
     }
 }
 let signup = async (req,res)=>{
     try {
-        let existingUser = await UserModel.find({ userId:req.body.userId})
+        let existingUser = await UserModel.find({ userId:req.body?.userId})
         if(existingUser.length>0){
             return res.status(400).json({errorMsg:"UserID alrady taken"})
         }
-        let user = UserModel({username:req.body.username,userId:req.body.userId,password:req.body.password,role:'USER'})
+        let user = UserModel({username:req.body?.username,userId:req.body?.userId,password:req.body?.password,role:'USER'})
         let response = await user.save()
         res.status(201).json(response)
     } catch (error) {
