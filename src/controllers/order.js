@@ -1,11 +1,36 @@
 let OrderModel = require("../models/order")
 let ClothModel = require("../models/cloth")
 const CustomError = require("../helpers/customError")
-let getAll = (req,res)=>{
+const order = require("../models/order")
+let getAll = async (req,res,next)=>{
+    try {
+        let orders = await OrderModel.find({})
+        if(orders.length>0){
+            res.status(200).json(orders)
+        }else{
+            throw new CustomError("NO order Has Been Made Yet.",404)
+        }
+    } catch (error) {
+        next(error)
+    }
     
 }
-let getOne = (req,res)=>{
-    
+let getOne =  async(req,res,next)=>{
+    try {
+        if(req.params.id){
+            let order = await OrderModel.findOne({_id:req.params.id})
+            if(order){
+                res.status(200).json(order)
+            }else{
+                throw new CustomError(`No order with id ${req.params.id} found`,404)
+            }
+        }else{
+            throw new CustomError("Invalid Request",400)
+        }
+      
+    } catch (error) {
+        next(error)
+    }
 }
 let update = (req,res)=>{
     
@@ -17,11 +42,8 @@ let create = async (req,res,next)=>{
             let clothes = req.body.clothes
             for(let i =0;i<clothes.length;i++){
                 let cloth = await ClothModel.findOne({name:clothes[i].name})
-                console.log(cloth)
                 totalPrice+=(cloth.price*clothes[i].quantity)
             }
-            console.log(totalPrice)
-            console.log(req.userId)
             let newOrder = await OrderModel.create({userId:req.userId,clothes,price:totalPrice})
             res.status(200).json(newOrder)
         }else{

@@ -1,4 +1,5 @@
 let UserModel = require("../models/user")
+let OrderModel = require("../models/order")
 let bcrypt = require("bcrypt")
 let jwtVerify=require('../helpers/jwtVerify')
 let {generateAccessToken,generateRefreshToken} = require('../helpers/generateToken')
@@ -118,12 +119,31 @@ let updateToken = async(req,res,next)=>{
     }
     
 }
+let getUserOrder = async(req,res,next)=>{
+    try {
+        if(req.params.id){
+            let orders = await OrderModel.find({userId:req.params.id})
+            if(orders.length>0){
+                res.status(200).json({orders})
+            }else{
+                throw new CustomError(`No order of user with id ${req.params.id} can be found`,404)
+            }
+        }else{
+            throw new CustomError("No user id found",400)
+        }
+    } catch (error) {
+        next(error)
+    }
+    
+}
 let deleteOne = (req,res)=>{
     
 }
+
 module.exports={
     getAll,
     getOne,
+    getUserOrder,
     update,
     signup,
     login,
