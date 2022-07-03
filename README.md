@@ -1,5 +1,5 @@
 # AAU-Laundary-App-Node.js-Backend
-This repository contains all the node js backend code for the AAU-Laundary Moblile app. The Server consists of serveral REST apis and uses JSON WEB TOKEN for authentication. In addition the database used for the server is Mongo DB
+This repository contains all the node js backend code for the AAU-Laundary Moblile app. The Server consists of serveral REST api and uses JSON WEB TOKEN for authentication. And the database used for the server is Mongo DB
 
 To start this node js server, first you have to create a dot evnironment file at the root folder of the repository and provide the values of PORT, DB_CONNECTION_STRING, ACCESS_TOKEN_KEY and REFRESH_TOKEN_KEY. 
 
