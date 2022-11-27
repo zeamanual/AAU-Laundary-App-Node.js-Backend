@@ -20,7 +20,7 @@ To start this node js server, first you have to create a dot evnironment file at
   3. PUT http://localhost:port/order/id  TO update details of an existing order
   4. DELETE http://localhost:port/order/id  To delete an order
 
-**FOR ORDER ROUTE**
+**FOR CLOTH ROUTE**
 
   1. GET http://localhost:port/cloth/id  To get all details a cloth
   2. POST http://localhost:port/cloth    To Create a new cloth detail 
